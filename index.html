@@ -251,10 +251,11 @@ function render(p){
   charts.servtpo = new Chart(document.getElementById('cServTpo'),{
     type:'bar',
     data:{labels:sn,datasets:[{data:sl,backgroundColor:'#0a1f44',borderWidth:0,barThickness:24}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:52}},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:118}},
       plugins:{legend:{display:false},
         tooltip:{callbacks:{label:(c)=>c.parsed.x+' min · '+sp[c.dataIndex]+'% del total'}},
-        datalabels:{anchor:'end',align:'end',color:'#E0531F',font:{weight:700,size:12},formatter:(v,c)=>sp[c.dataIndex]+'%'}},
+        datalabels:{anchor:'end',align:'end',color:'#0a1f44',font:{weight:700,size:11.5},
+          formatter:(v,c)=>v+' min  ·  '+sp[c.dataIndex]+'%'}},
       scales:{x:{beginAtZero:true,title:{display:true,text:'minutos (mediana) · % = peso en total servicios'}}}}
   });
 
