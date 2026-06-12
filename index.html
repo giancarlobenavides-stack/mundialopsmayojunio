@@ -118,12 +118,17 @@
         </div>
         <div class="nstat">
           <div class="dot" style="background:#E0531F;"></div>
-          <div class="txt"><div class="nm">Desborde · rescate de aliado</div><div class="ds">servicios que otro proveedor no cubrió</div></div>
+          <div class="txt"><div class="nm">Desborde</div><div class="ds">servicios que otro proveedor no cubrió</div></div>
           <div class="num" id="nDesb">—<small id="nDesbp"></small></div>
         </div>
       </div>
       <div class="chartwrap" style="height:180px;"><canvas id="cNivel"></canvas></div>
     </div>
+  </div>
+
+  <div class="card" style="margin-bottom:22px;">
+    <h3>Top 5 ciudades de inicio con más servicios</h3>
+    <table class="profile" id="ciudadesTable"></table>
   </div>
 
   <div class="grid2">
@@ -157,7 +162,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <script>
-const DATA = {"mayo": {"n": 52, "goa": 1, "goa_pct": 1.9, "n1": 39, "n1_pct": 75.0, "desb": 13, "desb_pct": 25.0, "asig": 2, "lleg_for": 185, "lleg_loc": null, "pesados": 49, "pesados_pct": 94, "foraneos": 51, "foraneos_pct": 98, "local": 1, "noprog": 30, "noprog_pct": 58, "mix": [17, 19, 10, 3, 2, 1, 0], "serv_lleg": [210, 154, 301, 1, null, null, null], "serv_peso": [32.7, 36.5, 19.2, 5.8, 3.8, 1.9, 0.0], "placas": [["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["SAV637", 3], ["WFR931", 3], ["TVA991", 3], ["GQU709", 2], ["ERK734", 2], ["TST744", 2], ["LPM007", 2]]}, "junio": {"n": 177, "goa": 19, "goa_pct": 10.7, "n1": 160, "n1_pct": 90.4, "desb": 17, "desb_pct": 9.6, "asig": 13, "lleg_for": 163, "lleg_loc": 121, "pesados": 157, "pesados_pct": 89, "foraneos": 158, "foraneos_pct": 89, "local": 19, "noprog": 118, "noprog_pct": 67, "mix": [65, 56, 13, 16, 22, 3, 2], "serv_lleg": [156, 178, 145, 176, 165, 664, 134], "serv_peso": [36.7, 31.6, 7.3, 9.0, 12.4, 1.7, 1.1], "placas": [["THS273", 5], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["ERK924", 3], ["TJY040", 3], ["SWX141", 3], ["TKD545", 3], ["WHV352", 3]]}, "acumulado": {"n": 229, "goa": 20, "goa_pct": 8.7, "n1": 199, "n1_pct": 86.9, "desb": 30, "desb_pct": 13.1, "asig": 12, "lleg_for": 170, "lleg_loc": 121, "pesados": 206, "pesados_pct": 90, "foraneos": 209, "foraneos_pct": 91, "local": 20, "noprog": 148, "noprog_pct": 65, "mix": [82, 75, 23, 19, 24, 4, 2], "serv_lleg": [174, 168, 223, 158, 165, 664, 134], "serv_peso": [35.8, 32.8, 10.0, 8.3, 10.5, 1.7, 0.9], "placas": [["THS273", 5], ["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["SAV637", 3], ["WFR931", 3]]}, "serv_order": ["Grúa pesado", "Desplazamiento", "Colisión", "Avería", "Extracción", "Custodia", "Otros"]};
+const DATA = {"mayo": {"n": 52, "goa": 1, "goa_pct": 1.9, "n1": 39, "n1_pct": 75.0, "desb": 13, "desb_pct": 25.0, "asig": 2, "lleg_for": 185, "lleg_loc": null, "pesados": 49, "pesados_pct": 94, "foraneos": 51, "foraneos_pct": 98, "local": 1, "noprog": 30, "noprog_pct": 58, "mix": [17, 19, 10, 3, 2, 1, 0], "serv_lleg": [210, 154, 301, 1, null, null, null], "serv_peso": [32.7, 36.5, 19.2, 5.8, 3.8, 1.9, 0.0], "placas": [["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["SAV637", 3], ["WFR931", 3], ["TVA991", 3], ["GQU709", 2], ["ERK734", 2], ["TST744", 2], ["LPM007", 2]], "ciudades": [["Medellín", 5, 9.6], ["Barranquilla", 4, 7.7], ["Caucasia", 3, 5.8], ["Bogotá, D.C.", 3, 5.8], ["Calarcá", 3, 5.8]]}, "junio": {"n": 177, "goa": 19, "goa_pct": 10.7, "n1": 160, "n1_pct": 90.4, "desb": 17, "desb_pct": 9.6, "asig": 13, "lleg_for": 163, "lleg_loc": 121, "pesados": 157, "pesados_pct": 89, "foraneos": 158, "foraneos_pct": 89, "local": 19, "noprog": 118, "noprog_pct": 67, "mix": [65, 56, 13, 16, 22, 3, 2], "serv_lleg": [156, 178, 145, 176, 165, 664, 134], "serv_peso": [36.7, 31.6, 7.3, 9.0, 12.4, 1.7, 1.1], "placas": [["THS273", 5], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["ERK924", 3], ["TJY040", 3], ["SWX141", 3], ["TKD545", 3], ["WHV352", 3]], "ciudades": [["Medellín", 18, 10.2], ["Pereira", 10, 5.6], ["Valledupar", 10, 5.6], ["Cali", 8, 4.5], ["Cartagena De Indias", 8, 4.5]]}, "acumulado": {"n": 229, "goa": 20, "goa_pct": 8.7, "n1": 199, "n1_pct": 86.9, "desb": 30, "desb_pct": 13.1, "asig": 12, "lleg_for": 170, "lleg_loc": 121, "pesados": 206, "pesados_pct": 90, "foraneos": 209, "foraneos_pct": 91, "local": 20, "noprog": 148, "noprog_pct": 65, "mix": [82, 75, 23, 19, 24, 4, 2], "serv_lleg": [174, 168, 223, 158, 165, 664, 134], "serv_peso": [35.8, 32.8, 10.0, 8.3, 10.5, 1.7, 0.9], "placas": [["THS273", 5], ["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["SAV637", 3], ["WFR931", 3]], "ciudades": [["Medellín", 23, 10.0], ["Cartagena De Indias", 10, 4.4], ["Pereira", 10, 4.4], ["Valledupar", 10, 4.4], ["Cali", 9, 3.9]]}, "serv_order": ["Grúa pesado", "Desplazamiento", "Colisión", "Avería", "Extracción", "Custodia", "Otros"]};
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 Chart.defaults.color = '#777';
@@ -195,6 +200,9 @@ function render(p){
   document.getElementById('pFor').textContent = d.foraneos+' / '+d.n+' · '+d.foraneos_pct+'%';
   document.getElementById('pNoprog').textContent = d.noprog+' / '+d.n+' · '+d.noprog_pct+'%';
   document.getElementById('pPlaca').textContent = d.placas.length? (d.placas[0][0]+' · '+d.placas[0][1]+' servicios') : '—';
+
+  const ct=document.getElementById('ciudadesTable');
+  ct.innerHTML = d.ciudades.map((c,i)=>'<tr><td>'+(i+1)+'. '+c[0]+'</td><td>'+c[1]+' servicios · '+c[2]+'%</td></tr>').join('');
 
   Object.values(charts).forEach(c=>c.destroy());
   charts={};
