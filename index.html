@@ -102,7 +102,7 @@
   <div class="kpis">
     <div class="kpi"><div class="lab">Efectividad Connect</div><div class="val">100%</div><div class="sub">cumplimiento operativo</div></div>
     <div class="kpi orange"><div class="lab">GOA (cancela cliente)</div><div class="val" id="kGoa">—</div><div class="sub" id="kGoaSub">no atribuible a Connect</div></div>
-    <div class="kpi navy"><div class="lab">Vehículo pesado</div><div class="val" id="kPes">—</div><div class="sub" id="kPesSub">tipo 900 + 600</div></div>
+    <div class="kpi navy"><div class="lab">Vehículo pesado</div><div class="val" id="kPes">—</div><div class="sub" id="kPesSub">tipo 900 + 600 + 350</div></div>
     <div class="kpi blue"><div class="lab">Operación foránea</div><div class="val" id="kFor">—</div><div class="sub" id="kForSub">fuera de ciudad</div></div>
   </div>
 
@@ -138,7 +138,7 @@
   </div>
 
   <div class="grid2">
-    <div class="card"><h3>Mix por tipo de servicio</h3><div class="chartwrap"><canvas id="cServ"></canvas></div></div>
+    <div class="card"><h3>Mix por tipo de servicio · pesado vs liviano</h3><div class="chartwrap tall"><canvas id="cServ"></canvas></div></div>
     <div class="card"><h3>Distribución foráneo vs local</h3><div class="chartwrap"><canvas id="cLoc"></canvas></div></div>
   </div>
 
@@ -152,7 +152,7 @@
     <table class="profile">
       <tr><td>Total servicios del período</td><td id="pTot">—</td></tr>
       <tr><td>Nivel 1 / Desborde</td><td id="pNivel">—</td></tr>
-      <tr><td>Vehículo pesado (tipo 900 + 600)</td><td id="pPes">—</td></tr>
+      <tr><td>Vehículo pesado (900+600+350) / liviano</td><td id="pPes">—</td></tr>
       <tr><td>Servicios foráneos</td><td id="pFor">—</td></tr>
       <tr><td>Servicios no programados</td><td id="pNoprog">—</td></tr>
       <tr><td>Placas con servicio reincidente (top)</td><td id="pPlaca">—</td></tr>
@@ -168,12 +168,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <script>
-const DATA = {"mayo": {"n": 52, "goa": 1, "goa_pct": 1.9, "n1": 39, "n1_pct": 75.0, "desb": 13, "desb_pct": 25.0, "asig": 14, "lleg_for": 185, "lleg_loc": null, "pesados": 49, "pesados_pct": 94, "foraneos": 51, "foraneos_pct": 98, "local": 1, "noprog": 30, "noprog_pct": 58, "mix": [17, 19, 10, 3, 2, 1, 0], "serv_lleg": [210, 154, 301, 1, null, null, null], "serv_peso": [32.7, 36.5, 19.2, 5.8, 3.8, 1.9, 0.0], "placas": [["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["SAV637", 3], ["WFR931", 3], ["TVA991", 3], ["GQU709", 2], ["ERK734", 2], ["TST744", 2], ["LPM007", 2]], "ciud_n1": [["Medellín", 5, 12.8], ["Barranquilla", 4, 10.3], ["Caucasia", 3, 7.7], ["Calarcá", 3, 7.7], ["Sopetrán", 3, 7.7]], "ciud_desb": [["Bogotá, D.C.", 3, 23.1], ["Puerto Gaitán", 2, 15.4], ["Arauquita", 2, 15.4], ["Guayabetal", 2, 15.4], ["Puerto Parra", 2, 15.4]]}, "junio": {"n": 177, "goa": 19, "goa_pct": 10.7, "n1": 160, "n1_pct": 90.4, "desb": 17, "desb_pct": 9.6, "asig": 22, "lleg_for": 164, "lleg_loc": 121, "pesados": 157, "pesados_pct": 89, "foraneos": 158, "foraneos_pct": 89, "local": 19, "noprog": 118, "noprog_pct": 67, "mix": [65, 56, 13, 16, 22, 3, 2], "serv_lleg": [156, 178, 145, 176, 168, 664, 134], "serv_peso": [36.7, 31.6, 7.3, 9.0, 12.4, 1.7, 1.1], "placas": [["THS273", 5], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["ERK924", 3], ["TJY040", 3], ["SWX141", 3], ["TKD545", 3], ["WHV352", 3]], "ciud_n1": [["Medellín", 18, 11.2], ["Pereira", 10, 6.2], ["Valledupar", 10, 6.2], ["Cali", 8, 5.0], ["Cartagena De Indias", 8, 5.0]], "ciud_desb": [["Soacha", 3, 17.6], ["Piedecuesta", 3, 17.6], ["Bogotá, D.C.", 2, 11.8], ["Cajamarca", 2, 11.8], ["San Pedro", 2, 11.8]]}, "acumulado": {"n": 229, "goa": 20, "goa_pct": 8.7, "n1": 199, "n1_pct": 86.9, "desb": 30, "desb_pct": 13.1, "asig": 22, "lleg_for": 172, "lleg_loc": 121, "pesados": 206, "pesados_pct": 90, "foraneos": 209, "foraneos_pct": 91, "local": 20, "noprog": 148, "noprog_pct": 65, "mix": [82, 75, 23, 19, 24, 4, 2], "serv_lleg": [174, 168, 223, 158, 168, 664, 134], "serv_peso": [35.8, 32.8, 10.0, 8.3, 10.5, 1.7, 0.9], "placas": [["THS273", 5], ["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["SAV637", 3], ["WFR931", 3]], "ciud_n1": [["Medellín", 23, 11.6], ["Cartagena De Indias", 10, 5.0], ["Pereira", 10, 5.0], ["Valledupar", 10, 5.0], ["Cali", 9, 4.5]], "ciud_desb": [["Bogotá, D.C.", 5, 16.7], ["Soacha", 3, 10.0], ["Piedecuesta", 3, 10.0], ["Puerto Gaitán", 2, 6.7], ["Arauquita", 2, 6.7]]}, "serv_order": ["Grúa pesado", "Desplazamiento", "Colisión", "Avería", "Extracción", "Custodia", "Otros"]};
+const DATA = {"mayo": {"n": 52, "goa": 1, "goa_pct": 1.9, "n1": 39, "n1_pct": 75.0, "desb": 13, "desb_pct": 25.0, "asig": 14, "lleg_for": 185, "lleg_loc": null, "pesados": 49, "pesados_pct": 94, "livianos": 3, "livianos_pct": 6, "foraneos": 51, "foraneos_pct": 98, "local": 1, "noprog": 30, "noprog_pct": 58, "mix": [20, 19, 10, 2, 1], "mix_pesado": [17, 19, 10, 2, 1], "mix_liviano": [3, 0, 0, 0, 0], "serv_lleg": [200, 154, 301, null, null], "serv_peso": [38.5, 36.5, 19.2, 3.8, 1.9], "placas": [["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["SAV637", 3], ["WFR931", 3], ["TVA991", 3], ["GQU709", 2], ["ERK734", 2], ["TST744", 2], ["LPM007", 2]], "ciud_n1": [["Medellín", 5, 12.8], ["Barranquilla", 4, 10.3], ["Caucasia", 3, 7.7], ["Calarcá", 3, 7.7], ["Sopetrán", 3, 7.7]], "ciud_desb": [["Bogotá, D.C.", 3, 23.1], ["Puerto Gaitán", 2, 15.4], ["Arauquita", 2, 15.4], ["Guayabetal", 2, 15.4], ["Puerto Parra", 2, 15.4]]}, "junio": {"n": 177, "goa": 19, "goa_pct": 10.7, "n1": 160, "n1_pct": 90.4, "desb": 17, "desb_pct": 9.6, "asig": 22, "lleg_for": 164, "lleg_loc": 121, "pesados": 162, "pesados_pct": 92, "livianos": 15, "livianos_pct": 8, "foraneos": 158, "foraneos_pct": 89, "local": 19, "noprog": 118, "noprog_pct": 67, "mix": [81, 56, 14, 23, 3], "mix_pesado": [71, 53, 13, 22, 3], "mix_liviano": [10, 3, 1, 1, 0], "serv_lleg": [161, 178, 139, 165, 664], "serv_peso": [45.8, 31.6, 7.9, 13.0, 1.7], "placas": [["THS273", 5], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["ERK924", 3], ["TJY040", 3], ["SWX141", 3], ["TKD545", 3], ["WHV352", 3]], "ciud_n1": [["Medellín", 18, 11.2], ["Pereira", 10, 6.2], ["Valledupar", 10, 6.2], ["Cali", 8, 5.0], ["Cartagena De Indias", 8, 5.0]], "ciud_desb": [["Soacha", 3, 17.6], ["Piedecuesta", 3, 17.6], ["Bogotá, D.C.", 2, 11.8], ["Cajamarca", 2, 11.8], ["San Pedro", 2, 11.8]]}, "acumulado": {"n": 229, "goa": 20, "goa_pct": 8.7, "n1": 199, "n1_pct": 86.9, "desb": 30, "desb_pct": 13.1, "asig": 22, "lleg_for": 172, "lleg_loc": 121, "pesados": 211, "pesados_pct": 92, "livianos": 18, "livianos_pct": 8, "foraneos": 209, "foraneos_pct": 91, "local": 20, "noprog": 148, "noprog_pct": 65, "mix": [101, 75, 24, 25, 4], "mix_pesado": [88, 72, 23, 24, 4], "mix_liviano": [13, 3, 1, 1, 0], "serv_lleg": [172, 168, 145, 165, 664], "serv_peso": [44.1, 32.8, 10.5, 10.9, 1.7], "placas": [["THS273", 5], ["SRN539", 4], ["TBZ220", 4], ["QON351", 4], ["LPM457", 4], ["LPM589", 4], ["WLR898", 4], ["SNS413", 4], ["SAV637", 3], ["WFR931", 3]], "ciud_n1": [["Medellín", 23, 11.6], ["Cartagena De Indias", 10, 5.0], ["Pereira", 10, 5.0], ["Valledupar", 10, 5.0], ["Cali", 9, 4.5]], "ciud_desb": [["Bogotá, D.C.", 5, 16.7], ["Soacha", 3, 10.0], ["Piedecuesta", 3, 10.0], ["Puerto Gaitán", 2, 6.7], ["Arauquita", 2, 6.7]]}, "serv_order": ["Grúa por avería", "Transporte de pasajeros", "Grúa por accidente", "Rescate", "Custodia"]};
 Chart.register(ChartDataLabels);
 Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 Chart.defaults.color = '#777';
 const SERV = DATA.serv_order;
-const SCOLORS = ['#0a1f44','#1b6ec2','#E0531F','#f0a93a','#0f9e75','#b9b9b9','#888'];
+const SCOLORS = ['#0a1f44','#1b6ec2','#E0531F','#0f9e75','#b9b9b9'];
 const LABELS = {mayo:'solo mayo', junio:'solo junio', acumulado:'acumulado may–jun'};
 let charts = {};
 
@@ -191,7 +191,7 @@ function render(p){
   document.getElementById('kGoa').textContent = d.goa_pct+'%';
   document.getElementById('kGoaSub').textContent = d.goa+' de '+d.n+' · no atribuible a Connect';
   document.getElementById('kPes').textContent = d.pesados_pct+'%';
-  document.getElementById('kPesSub').textContent = d.pesados+' de '+d.n+' (tipo 900+600)';
+  document.getElementById('kPesSub').textContent = d.pesados+' de '+d.n+' (tipo 900+600+350)';
   document.getElementById('kFor').textContent = d.foraneos_pct+'%';
   document.getElementById('kForSub').textContent = d.foraneos+' de '+d.n+' fuera de ciudad';
 
@@ -202,7 +202,7 @@ function render(p){
 
   document.getElementById('pTot').textContent = d.n;
   document.getElementById('pNivel').textContent = d.n1+' ('+d.n1_pct+'%) / '+d.desb+' ('+d.desb_pct+'%)';
-  document.getElementById('pPes').textContent = d.pesados+' / '+d.n+' · '+d.pesados_pct+'%';
+  document.getElementById('pPes').textContent = d.pesados+' / '+d.n+' · '+d.pesados_pct+'% (liviano '+d.livianos+' · '+d.livianos_pct+'%)';
   document.getElementById('pFor').textContent = d.foraneos+' / '+d.n+' · '+d.foraneos_pct+'%';
   document.getElementById('pNoprog').textContent = d.noprog+' / '+d.n+' · '+d.noprog_pct+'%';
   document.getElementById('pPlaca').textContent = d.placas.length? (d.placas[0][0]+' · '+d.placas[0][1]+' servicios') : '—';
@@ -222,14 +222,19 @@ function render(p){
         datalabels:{color:'#fff',font:{weight:700,size:15},formatter:(v)=>Math.round(v/d.n*100)+'%'}}}
   });
 
-  const mixData=[], mixLab=[], mixCol=[];
-  SERV.forEach((s,i)=>{ if(d.mix[i]>0){ mixData.push(d.mix[i]); mixLab.push(s); mixCol.push(SCOLORS[i]); }});
   charts.serv = new Chart(document.getElementById('cServ'),{
-    type:'doughnut',
-    data:{labels:mixLab,datasets:[{data:mixData,backgroundColor:mixCol,borderWidth:1,borderColor:'#fff'}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'52%',
-      plugins:{legend:{position:'right',labels:{boxWidth:11,font:{size:11},padding:7}},
-        datalabels:{color:'#fff',font:{weight:700,size:13},formatter:(v)=>v>=3?v:''}}}
+    type:'bar',
+    data:{labels:SERV,datasets:[
+      {label:'Pesado',data:d.mix_pesado,backgroundColor:'#0a1f44',borderWidth:0},
+      {label:'Liviano',data:d.mix_liviano,backgroundColor:'#1b6ec2',borderWidth:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:11},padding:10}},
+        datalabels:{color:'#fff',font:{weight:700,size:11},formatter:(v)=>v>0?v:''}},
+      scales:{
+        x:{stacked:true,ticks:{font:{size:9.5},maxRotation:25,minRotation:0}},
+        y:{stacked:true,beginAtZero:true,title:{display:true,text:'nº de servicios'}}
+      }}
   });
 
   charts.loc = new Chart(document.getElementById('cLoc'),{
